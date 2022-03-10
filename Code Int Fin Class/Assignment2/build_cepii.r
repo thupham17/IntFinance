@@ -21,11 +21,13 @@ raw_data = read_csv(paste0(data_path,fname))
 #                   Clean
 #################################################
 clean_data <- raw_data %>% 
-         select(year, investor=iso3_o,issuer=iso3_d,dist=distw,comlang=comlang_off,gdp=gdp_d,gdp_cap=gdpcap_d) %>%
-         filter(year>=2002) %>%
-         mutate(dist=dist/1000,
-                gdp = gdp *10 ^(-9))
+             select(year, investor=iso3_o,issuer=iso3_d,dist=distw,comlang=comlang_off,gdp=gdp_d,gdp_cap=gdpcap_d) %>%
+             filter(year>=2002) %>%
+             mutate(dist=dist/1000,
+                    gdp = log(gdp),
+                    gdp_cap = log(gdp_cap))
 
+# set distance between same country = 0, comlang = 1
 #########################################
 #           Write dataset
 #########################################

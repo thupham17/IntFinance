@@ -23,13 +23,13 @@ country_map <- read_dta(paste0(data_root,"rawdata/",map_name))
 #                   Clean
 #################################################
 clean_data <- raw_data %>% 
-  # convert stata quarter to year/quarter, stata date starts 01jan1960
-  mutate(year = (quarter-1) %/% 4+1960,
-         quarter = ifelse(quarter %% 4==0,4,quarter %% 4==0)) %>%
-  filter(year >= 2002,
-         quarter==4) %>%
   # exchange rate in USD per foreign currency
   mutate(fx = 1/fx_per_usd) %>%
+  # convert stata quarter to year/quarter, stata date starts 01jan1960
+  mutate(year = 1960+floor(quarter/4),
+         quarter = quarter%%4+1) %>%
+  filter(year >= 2002,
+         quarter==4) %>%
   select(year, fx,iso_currency_code=iso_currency)
 
 # Merge with country codes
